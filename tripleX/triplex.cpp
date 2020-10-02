@@ -1,4 +1,5 @@
 #include <iostream>
+#include <ctime>
 
 void PrintIntro() {
     std::cout << "\n\n==================================\n\n";
@@ -18,15 +19,15 @@ bool PlayGame(int Difficulty) {
     }
 
     // Declare code variables
-    int CodeA = 4;
-    int CodeB = 7;
-    int CodeC = 3;
+    const int CodeA = (rand() % Difficulty) + Difficulty;
+    const int CodeB = (rand() % Difficulty) + Difficulty;
+    const int CodeC = (rand() % Difficulty) + Difficulty;
 
-    int CodeSum = CodeA + CodeB + CodeC;
-    int CodeProduct = CodeA * CodeB * CodeC;
+    const int CodeSum = CodeA + CodeB + CodeC;
+    const int CodeProduct = CodeA * CodeB * CodeC;
 
     // Provide the player with required conditions
-    std::cout << "Room " << RoomNum;
+    std::cout << "\nRoom " << RoomNum;
     std::cout << "\nThe three weights must add up to: " << CodeSum;
     std::cout << "\nThey must also multiply to equal: " << CodeProduct;
 
@@ -41,7 +42,7 @@ bool PlayGame(int Difficulty) {
     // Check if the guess is correct
     if (GuessSum == CodeSum && GuessProduct == CodeProduct) {
         std::cout << "\nYou placed the correct number of stones in the bags!\n";
-        std::cout << "You proceed to the next room.\n";
+        std::cout << "The path to the next room is now open.\n";
         return true;
     } else {
         std::cout << "\nYou placed the incorrect number of stones in the bags!\n";
@@ -52,15 +53,20 @@ bool PlayGame(int Difficulty) {
 
 int main() {
     int LevelDifficulty = 2;
-    while (true) {
+    const int MaxDifficulty = 11;
+    srand(time(NULL)); // Seed rand based on the time for more random results
+
+    while (LevelDifficulty <= MaxDifficulty) {
         bool bLevelComplete = PlayGame(LevelDifficulty);
-        std::cin.clear();
-        std::cin.ignore();
+        std::cin.clear(); // Clear errors with input
+        std::cin.ignore(); // Discard the buffer
 
         if (bLevelComplete) {
             ++LevelDifficulty;
         }
-    }   
+    }
+
+    std::cout << "\nYou have successfully traversed the forest realm!";
     
     return 0;
 }
