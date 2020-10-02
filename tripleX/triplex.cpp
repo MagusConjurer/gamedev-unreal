@@ -1,14 +1,18 @@
 #include <iostream>
 
-int main() {
-    // Print the introduction to the game 
+void PrintIntro() {
     std::cout << "==================================\n\n";
     std::cout << "You have entered the forest realm.\n\n";
     std::cout << "==================================\n\n";
     std::cout << "Before you, there are three bags and a pile of small stones.\n";
     std::cout << "A man steps out from a door in a nearby tree and says:\n";
     std::cout << "\"You must fill the bags with the correct number of stones and place them on the pedestals to proceed into the next realm.\"\n\n";
+}
 
+void PlayGame() {
+    PrintIntro();
+
+    // Declare code variables
     int CodeA = 4;
     int CodeB = 7;
     int CodeC = 3;
@@ -39,6 +43,9 @@ int main() {
         std::cout << "\nYou placed the incorrect number of stones in the bags!\n";
         std::cout << "A large stone falls from above, blocking the path forward.\n";
     }
+}
 
+int main() {
+    PlayGame();
     return 0;
 }
