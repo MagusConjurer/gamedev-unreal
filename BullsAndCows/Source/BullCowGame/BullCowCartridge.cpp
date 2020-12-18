@@ -1,5 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "BullCowCartridge.h"
+#include "HiddenWordList.h"
 
 void UBullCowCartridge::BeginPlay() // When the game starts
 {
@@ -23,7 +24,7 @@ void UBullCowCartridge::OnInput(const FString& Input) // When the player hits en
 
 void UBullCowCartridge::InitGame() // Set the starting values to member variables
 {
-    HiddenWord = TEXT("Horde");
+    HiddenWord = TEXT("horde");
     Lives = 5;
     bGameOver = false;
 
@@ -39,9 +40,22 @@ void UBullCowCartridge::EndGame()
     PrintLine(TEXT("\nPress Enter to play again."));
 }
 
+bool UBullCowCartridge::IsIsogram(const FString Word) const
+{
+    for (int32 i = 0; i < Word.Len() - 1; i++) {
+        for (int32 j = i + 1; j < Word.Len(); j++) {
+            if (Word[i] == Word[j]) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
 void UBullCowCartridge::ProcessGuess(const FString Guess)
 {
-    // Check if they have entered the correct word
+    // Check for the correct word
     if (Guess == HiddenWord) {
         ClearScreen();
         PrintLine(TEXT("That is the correct word!"));
@@ -61,15 +75,16 @@ void UBullCowCartridge::ProcessGuess(const FString Guess)
         return;
     } 
 
-    //// Check if the guess is an isogram
-    //if (!IsIsogram) {
-    //    PrintLine(TEXT("NOTE: The hidden word has no repeating letters."));
-    //}
-
-    // Check if the guess is the correct length
+    // Check for the correct length
     if (HiddenWord.Len() != Guess.Len()) {
-        PrintLine(TEXT("NOTE: Your answer was %i letters \ninstead of %i."), Guess.Len(), HiddenWord.Len());
+        PrintLine(TEXT("Your answer was %i letters instead of %i."), Guess.Len(), HiddenWord.Len());
     }
+
+    // Check for an isogram
+    if (!IsIsogram(Guess)) {
+        PrintLine(TEXT("The hidden word has no repeating letters."));
+    }
+
     PrintLine(TEXT("You have %i lives remaining."), Lives); 
     PrintLine(TEXT("Enter another word."));
 }
