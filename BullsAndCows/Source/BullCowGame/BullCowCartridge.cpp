@@ -7,9 +7,6 @@ void UBullCowCartridge::BeginPlay() // When the game starts
     Super::BeginPlay();
 
     InitGame();
-
-    PrintLine(TEXT("Valid words: %i"), GetValidWords(Words).Num());
-    PrintLine(TEXT("The hidden word is: %s"), *HiddenWord); // Showing the word for testing
 }
 
 void UBullCowCartridge::OnInput(const FString& Input) // When the player hits enter
@@ -25,7 +22,7 @@ void UBullCowCartridge::OnInput(const FString& Input) // When the player hits en
 
 void UBullCowCartridge::InitGame() // Set the starting values to member variables
 {
-    HiddenWord = TEXT("horde");
+    HiddenWord = GetValidWords(Words)[FMath::RandRange(0, GetValidWords(Words).Num() - 1)];
     Lives = 5;
     bGameOver = false;
 
@@ -33,6 +30,7 @@ void UBullCowCartridge::InitGame() // Set the starting values to member variable
     PrintLine(TEXT("Guess the %i letter word"), HiddenWord.Len());
     PrintLine(TEXT("You have %i lives."), Lives);
     PrintLine(TEXT("Press Tab, type your guess and then press Enter to begin..."));
+    PrintLine(TEXT("The hidden word is: %s"), *HiddenWord); // Showing the word for testing
 }
 
 void UBullCowCartridge::EndGame()
@@ -41,7 +39,7 @@ void UBullCowCartridge::EndGame()
     PrintLine(TEXT("\nPress Enter to play again."));
 }
 
-bool UBullCowCartridge::IsIsogram(const FString Word) const
+bool UBullCowCartridge::IsIsogram(const FString& Word) const
 {
     for (int32 i = 0; i < Word.Len() - 1; i++) {
         for (int32 j = i + 1; j < Word.Len(); j++) {
@@ -54,7 +52,7 @@ bool UBullCowCartridge::IsIsogram(const FString Word) const
     return true;
 }
 
-TArray<FString> UBullCowCartridge::GetValidWords(TArray<FString> WordList) const
+TArray<FString> UBullCowCartridge::GetValidWords(const TArray<FString>& WordList) const
 {
     TArray<FString> ValidWords;
 
@@ -69,7 +67,7 @@ TArray<FString> UBullCowCartridge::GetValidWords(TArray<FString> WordList) const
     return ValidWords;
 }
 
-void UBullCowCartridge::ProcessGuess(const FString Guess)
+void UBullCowCartridge::ProcessGuess(const FString& Guess)
 {
     // Check for the correct word
     if (Guess == HiddenWord) {
@@ -102,5 +100,5 @@ void UBullCowCartridge::ProcessGuess(const FString Guess)
     }
 
     PrintLine(TEXT("You have %i lives remaining."), Lives); 
-    PrintLine(TEXT("Enter another word."));
+    PrintLine(TEXT("Enter another word.\n"));
 }
