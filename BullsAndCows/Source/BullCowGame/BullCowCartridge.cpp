@@ -8,6 +8,7 @@ void UBullCowCartridge::BeginPlay() // When the game starts
 
     InitGame();
 
+    PrintLine(TEXT("Valid words: %i"), GetValidWords(Words).Num());
     PrintLine(TEXT("The hidden word is: %s"), *HiddenWord); // Showing the word for testing
 }
 
@@ -51,6 +52,21 @@ bool UBullCowCartridge::IsIsogram(const FString Word) const
     }
 
     return true;
+}
+
+TArray<FString> UBullCowCartridge::GetValidWords(TArray<FString> WordList) const
+{
+    TArray<FString> ValidWords;
+
+    // Check array for valid isograms of length 4-8 characters
+    // Using a range based for loop to go through the entire collection of words
+    for (FString Word : WordList) {
+        if (Word.Len() >= 4 && Word.Len() <= 8 && IsIsogram(Word)) {
+            ValidWords.Emplace(Word);
+        }
+    }
+
+    return ValidWords;
 }
 
 void UBullCowCartridge::ProcessGuess(const FString Guess)
