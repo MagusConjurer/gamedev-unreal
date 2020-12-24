@@ -6,6 +6,9 @@ void UBullCowCartridge::BeginPlay() // When the game starts
 {
     Super::BeginPlay();
 
+    // Get valid words once at the start of the game
+    Isograms = GetValidWords(Words);
+
     InitGame();
 }
 
@@ -22,7 +25,7 @@ void UBullCowCartridge::OnInput(const FString& Input) // When the player hits en
 
 void UBullCowCartridge::InitGame() // Set the starting values to member variables
 {
-    HiddenWord = GetValidWords(Words)[FMath::RandRange(0, GetValidWords(Words).Num() - 1)];
+    HiddenWord = Isograms[FMath::RandRange(0, Isograms.Num() - 1)];
     Lives = 5;
     bGameOver = false;
 
@@ -30,7 +33,6 @@ void UBullCowCartridge::InitGame() // Set the starting values to member variable
     PrintLine(TEXT("Guess the %i letter word"), HiddenWord.Len());
     PrintLine(TEXT("You have %i lives."), Lives);
     PrintLine(TEXT("Press Tab, type your guess and then press Enter to begin..."));
-    PrintLine(TEXT("The hidden word is: %s"), *HiddenWord); // Showing the word for testing
 }
 
 void UBullCowCartridge::EndGame()
@@ -67,17 +69,40 @@ TArray<FString> UBullCowCartridge::GetValidWords(const TArray<FString>& WordList
     return ValidWords;
 }
 
+FBullCowCount UBullCowCartridge::GetBullCows(const FString& Guess) const
+{
+    // Set the value, even if it does not hit one of the checks
+    FBullCowCount Count;
+
+    // Check if index of Guess matches index of HiddenWord
+    for (int32 GuessIndex = 0; GuessIndex < Guess.Len(); GuessIndex++)
+    {
+        if (Guess[GuessIndex] == HiddenWord[GuessIndex]) {
+            Count.Bulls++;
+            continue;
+        }
+        for (int32 HiddenIndex = 0; HiddenIndex < HiddenWord.Len(); HiddenIndex++) {
+            if (Guess[GuessIndex] == HiddenWord[HiddenIndex]) {
+                Count.Cows++;
+                break;
+            }
+        }
+    }
+
+    return Count;
+}
+
 void UBullCowCartridge::ProcessGuess(const FString& Guess)
 {
     // Check for the correct word
     if (Guess == HiddenWord) {
         ClearScreen();
-        PrintLine(TEXT("That is the correct word!"));
+        PrintLine(TEXT("%s is the correct word!"), *HiddenWord);
         EndGame();
         return;
     } 
 
-    PrintLine(TEXT("You have not entered the correct word."));
+    PrintLine(TEXT("\nYou have not entered the correct word."));
     --Lives;
 
     // Check if the player has lives remaining
@@ -99,6 +124,12 @@ void UBullCowCartridge::ProcessGuess(const FString& Guess)
         PrintLine(TEXT("The hidden word has no repeating letters."));
     }
 
+    // Check for correct letters and index
+    if (Guess.Len() == HiddenWord.Len()) {
+        FBullCowCount Score = GetBullCows(Guess);
+        PrintLine(TEXT("You have %i Bulls and %i Cows."), Score.Bulls, Score.Cows);
+    }
+    
     PrintLine(TEXT("You have %i lives remaining."), Lives); 
     PrintLine(TEXT("Enter another word.\n"));
 }
