@@ -24,20 +24,21 @@ void UOpenDoor::BeginPlay()
 	FString RightDoor = ("SM_DoorWay_Large_Door_Right_8");
 	FString Door = GetOwner()->GetName();
 
-	float OpenAngle = 0.f;
+	StartingYaw = GetOwner()->GetActorRotation().Yaw;
+	CurrentYaw = StartingYaw;
 
 	if (Door == LeftDoor) {
-		OpenAngle = 90.f;
+		TargetYaw = StartingYaw + 90.f;
 	}
 	else if (Door == RightDoor) {
-		OpenAngle = -90.f;
+		TargetYaw = StartingYaw - 90.f;
 	}
 	
 	
 	// Returns as pitch, yaw, roll (Y,Z,X)
-	FRotator CurrentRotation = GetOwner()->GetActorRotation();
-	FRotator OpenRotation(0.f, OpenAngle, 0.f);
-	GetOwner()->SetActorRotation(OpenRotation);
+	// FRotator CurrentRotation = GetOwner()->GetActorRotation();
+	// FRotator OpenRotation(0.f, TargetYaw, 0.f);
+	// GetOwner()->SetActorRotation(OpenRotation);
 }
 
 
@@ -46,6 +47,11 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
+	// Open the door over a short period of time
+
+	FRotator DoorRotation = GetOwner()->GetActorRotation();
+	CurrentYaw = FMath::FInterpTo(CurrentYaw, TargetYaw, DeltaTime, 2.0f);
+	DoorRotation.Yaw = CurrentYaw;
+	GetOwner()->SetActorRotation(DoorRotation);
 }
 
