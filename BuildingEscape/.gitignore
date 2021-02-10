@@ -71,9 +71,10 @@ Plugins/*/Intermediate/*
 # Cache files for the editor to use
 DerivedDataCache/*
 
-# Starter Content Ignored
+# Content Ignored
 
 Content/StarterContent/*
+Content/MedievalDungeon/*
 
 VSCode Files
 /.vscode/*
