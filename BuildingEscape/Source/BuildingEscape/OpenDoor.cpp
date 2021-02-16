@@ -12,8 +12,6 @@ UOpenDoor::UOpenDoor()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
 }
 
 
@@ -24,7 +22,7 @@ void UOpenDoor::BeginPlay()
 
 	StartingYaw = GetOwner()->GetActorRotation().Yaw;
 	CurrentYaw = StartingYaw;
-	TargetYaw += StartingYaw;
+	AngleToOpen += StartingYaw;
 
 	if (!PressurePlate) {
 		UE_LOG(LogTemp, Error, TEXT("%s has the OpenDoor component, but no pressure plate has been assigned."), *GetOwner()->GetName());
@@ -41,9 +39,12 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 
 	if (PressurePlate && PressurePlate->IsOverlappingActor(ActorThatOpens)) {
 		OpenDoor(DeltaTime);
+		DoorLastOpened = GetWorld()->GetTimeSeconds();
 	}
 	else {
-		CloseDoor(DeltaTime);
+		if (GetWorld()->GetTimeSeconds() - DoorLastOpened > DoorCloseDelay) {
+			CloseDoor(DeltaTime);
+		}
 	}
 }
 
@@ -51,7 +52,7 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 void UOpenDoor::OpenDoor(float DeltaTime)
 {
 	FRotator DoorRotation = GetOwner()->GetActorRotation();
-	CurrentYaw = FMath::FInterpTo(CurrentYaw, TargetYaw, DeltaTime, 2.0f);
+	CurrentYaw = FMath::FInterpTo(CurrentYaw, AngleToOpen, DeltaTime, 2.0f);
 	DoorRotation.Yaw = CurrentYaw;
 	GetOwner()->SetActorRotation(DoorRotation);
 }
