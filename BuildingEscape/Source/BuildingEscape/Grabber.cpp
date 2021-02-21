@@ -5,7 +5,7 @@
 #include "Engine/World.h"
 #include "GameFramework/PlayerController.h"
 
-// These are out parameters
+// This is an out parameter
 #define OUT
 
 // Sets default values for this component's properties
