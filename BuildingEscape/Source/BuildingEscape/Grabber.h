@@ -33,5 +33,16 @@ private:
 
 	void Grab();
 	void Release();
-		
+	void GetPhysicsHandle();
+	void SetupInputComponent();
+
+	// Return the line trace end
+	FVector GetLineTraceEnd() const;
+
+	// Return the player's location in the world
+	FVector GetPlayerPosition() const;
+
+	// Return first actor within reach with a physics body
+	FHitResult GetFirstPhysicsBodyInReach() const;
+	
 };
