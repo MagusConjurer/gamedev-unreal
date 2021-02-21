@@ -29,7 +29,7 @@ void UGrabber::BeginPlay()
 void UGrabber::GetPhysicsHandle()
 {
 	PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
-	if (PhysicsHandle == nullptr) {
+	if (!PhysicsHandle) {
 		UE_LOG(LogTemp, Error, TEXT("No PhysicsHandle component found on the %s"), *GetOwner()->GetName());
 	}	
 }
@@ -47,11 +47,13 @@ void UGrabber::Grab()
 {
 	FHitResult HitResult = GetFirstPhysicsBodyInReach();
 	UPrimitiveComponent* ComponentToGrab = HitResult.GetComponent();
+	AActor* HitActor = HitResult.GetActor();
 
 	// Check for any actors with physics bodies collision channel set within reach
-	if (HitResult.GetActor()) 
+	if (HitActor) 
 	{
-		FRotator HitRotation = HitResult.GetActor()->GetActorRotation();
+		if (!PhysicsHandle) { return; }
+		FRotator HitRotation = HitActor->GetActorRotation();
 		PhysicsHandle->GrabComponentAtLocationWithRotation(
 			ComponentToGrab,
 			NAME_None,
@@ -63,6 +65,7 @@ void UGrabber::Grab()
 
 void UGrabber::Release()
 {
+	if (!PhysicsHandle) { return; }
 	PhysicsHandle->ReleaseComponent();
 }
 
