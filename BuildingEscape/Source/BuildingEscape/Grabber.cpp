@@ -24,16 +24,29 @@ void UGrabber::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// Check for the PhysicsHandle component
+	// Get and confirm PhysicsHandle component
 	PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
-	if (PhysicsHandle) {
-		// Physics handle is found
-	}
-	else {
+	if (!PhysicsHandle) {
 		UE_LOG(LogTemp, Error, TEXT("No PhysicsHandle component found on the %s"), *GetOwner()->GetName());
+	}
+
+	// Get Input component
+	Input = GetOwner()->FindComponentByClass<UInputComponent>();
+	if (Input) {
+		Input->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
+		Input->BindAction("Grab", IE_Released, this, &UGrabber::Release);
 	}
 }
 
+void UGrabber::Grab()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Grabbed"));
+}
+
+void UGrabber::Release()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Released"));
+}
 
 // Called every frame
 void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -41,6 +54,7 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// Get player viewpoint
+
 	FVector PlayerViewPointLocation;
 	FRotator PlayerViewPointRotation;
 	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(
@@ -49,6 +63,7 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	);
 
 	// Draw a line from the player to show reach
+
 	FVector LineTraceEnd = PlayerViewPointLocation + PlayerViewPointRotation.Vector() * Reach;
 	DrawDebugLine(
 		GetWorld(),
@@ -61,9 +76,10 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		1.f
 	);
 
+	// Ray cast a set distance (reach)
+
 	FHitResult Hit;
 	FCollisionQueryParams TraceParams(FName(TEXT("")), false, GetOwner());
-	// Ray cast a set distance (reach)
 	GetWorld()->LineTraceSingleByObjectType(
 		OUT Hit,
 		PlayerViewPointLocation,
@@ -72,10 +88,10 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		TraceParams
 	);
 
-	// See what is hit
-	AActor* HitActor = Hit.GetActor();
+	// Get what has been hit
 
+	AActor* HitActor = Hit.GetActor();
 	if (HitActor) {
-		UE_LOG(LogTemp, Warning, TEXT("You reached for: %s"), *HitActor->GetName());
+		// UE_LOG(LogTemp, Warning, TEXT("You reached for: %s"), *HitActor->GetName());
 	};	
 }
