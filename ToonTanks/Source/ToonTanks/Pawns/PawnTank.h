@@ -18,16 +18,16 @@ class TOONTANKS_API APawnTank : public APawnBase
 	
 private:
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, Category = "Components")
 	USpringArmComponent* SpringArm;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UCameraComponent* Camera;
 
 	FVector MoveDirection;
 	FQuat RotationDirection;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite., Category = "Movement", meta = (AllowPrivateAccess = "true"))
-		float MoveSpeed = 100.f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite., Category = "Movement", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, Category = "Movement")
+	float MoveSpeed = 100.f;
+	UPROPERTY(EditAnywhere, Category = "Movement")
 	float RotationSpeed = 100.f;
 
 	void CalcualateMoveInput(float Value);
