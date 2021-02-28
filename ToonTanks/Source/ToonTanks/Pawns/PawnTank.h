@@ -35,6 +35,8 @@ private:
 	void Move();
 	void Rotate();
 
+	APlayerController* PlayerControllerRef;
+
 public:
 
 	APawnTank();
@@ -48,4 +50,7 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	// Play effects and handle destruction of pawn
+	virtual void HandleDestruction() override;
 };
