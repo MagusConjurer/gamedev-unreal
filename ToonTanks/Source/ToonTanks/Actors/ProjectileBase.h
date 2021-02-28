@@ -33,4 +33,6 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Damage")
 	float Damage = 50;
 
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 };
