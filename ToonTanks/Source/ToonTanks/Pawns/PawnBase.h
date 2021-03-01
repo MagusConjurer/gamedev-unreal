@@ -33,13 +33,13 @@ public:
 	// Sets default values for this pawn's properties
 	APawnBase();
 
+	// Play effects and handle destruction of pawn
+	virtual void HandleDestruction();
+
 protected:
 
 	// Update rotation to look at the targets location
 	void RotateTurret(FVector Target);
 	// Create projectile and launch at target
 	void Fire();
-	// Play effects and handle destruction of pawn
-	virtual void HandleDestruction();
-
 };
