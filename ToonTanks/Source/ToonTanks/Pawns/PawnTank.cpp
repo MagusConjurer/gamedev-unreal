@@ -75,5 +75,6 @@ void APawnTank::HandleDestruction()
 {
 	Super::HandleDestruction();
 
-	// Hide player using separate function
+	// Hide player
+	Destroy();
 }
