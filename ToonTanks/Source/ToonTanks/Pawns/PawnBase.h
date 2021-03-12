@@ -8,26 +8,12 @@
 
 class UCapsuleComponent;
 class AProjectileBase;
+class UHealthComponent;
 
 UCLASS()
 class TOONTANKS_API APawnBase : public APawn
 {
 	GENERATED_BODY()
-
-private:
-	// Components
-	UPROPERTY(VisibleAnywhere, Category = "Components")
-	UCapsuleComponent* CapsuleComp;
-	UPROPERTY(VisibleAnywhere, Category = "Components")
-	UStaticMeshComponent* BaseMesh;
-	UPROPERTY(VisibleAnywhere, Category = "Components")
-	UStaticMeshComponent* TurretMesh;
-	UPROPERTY(VisibleAnywhere, Category = "Components")
-	USceneComponent* ProjectileSpawnPoint;
-	
-	// Variables
-	UPROPERTY(EditAnywhere, Category = "Projectile Type")
-	TSubclassOf<AProjectileBase> ProjectileClass;
 
 public:
 	// Sets default values for this pawn's properties
@@ -42,4 +28,26 @@ protected:
 	void RotateTurret(FVector Target);
 	// Create projectile and launch at target
 	void Fire();
+
+private:
+	// Components
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UCapsuleComponent* CapsuleComp;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UStaticMeshComponent* BaseMesh;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UStaticMeshComponent* TurretMesh;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	USceneComponent* ProjectileSpawnPoint;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UHealthComponent* HealthComponent;
+
+	// Variables
+	UPROPERTY(EditAnywhere, Category = "Projectile Type")
+	TSubclassOf<AProjectileBase> ProjectileClass;
+
+	// Effects
+	UPROPERTY(EditAnywhere, Category = "Effects")
+	UParticleSystem* DeathParticle;
+
 };

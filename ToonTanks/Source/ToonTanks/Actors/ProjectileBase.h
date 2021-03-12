@@ -22,17 +22,25 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
+	// Components
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UProjectileMovementComponent* ProjectileMovement;
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UStaticMeshComponent* ProjectileMesh;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UParticleSystemComponent* ParticleTrail;
+	
+	// Variables
 	UPROPERTY(EditDefaultsOnly, Category = "Damage")
 	TSubclassOf<UDamageType> DamageType;
 	UPROPERTY(EditAnywhere, Category = "Movement")
 	float MovementSpeed = 1300;
 	UPROPERTY(EditAnywhere, Category = "Damage")
 	float Damage = 50;
-
+	UPROPERTY(EditAnywhere, Category = "Effects")
+	UParticleSystem* HitParticle;
+	
+	// Functions
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 };
