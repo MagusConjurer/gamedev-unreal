@@ -18,6 +18,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void PullTrigger();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -28,6 +30,8 @@ private:
 	USceneComponent* Root;
 	UPROPERTY(VisibleAnywhere)
 	USkeletalMeshComponent* Mesh;
+	UPROPERTY(EditAnywhere)
+	UParticleSystem* MuzzleFlash;
 
 	// Variables
 
