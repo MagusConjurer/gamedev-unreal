@@ -51,7 +51,13 @@ void AGun::PullTrigger()
 	// Set the range and get any hit on the Bullet trace channel
 	FVector LineTraceEnd = ViewpointLocation + ViewpointRotation.Vector() * MaxRange;
 	FHitResult HitResult;
-	GetWorld()->LineTraceSingleByChannel(HitResult, ViewpointLocation, LineTraceEnd, ECollisionChannel::ECC_GameTraceChannel1);
+
+	// Ignore collision for the gun and the character holding it
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActor(this);
+	Params.AddIgnoredActor(GetOwner());
+
+	GetWorld()->LineTraceSingleByChannel(HitResult, ViewpointLocation, LineTraceEnd, ECollisionChannel::ECC_GameTraceChannel1, Params);
 	
 	if (HitResult.bBlockingHit)
 	{

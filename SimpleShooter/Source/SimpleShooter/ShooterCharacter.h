@@ -29,6 +29,7 @@ public:
 	UFUNCTION(BlueprintPure)
 	bool IsDead() const;
 
+	void Shoot();
 
 protected:
 	// Called when the game starts or when spawned
@@ -40,7 +41,6 @@ private:
 	void MoveRight(float AxisValue);
 	void LookUpRate(float AxisValue);
 	void LookRightRate(float AxisValue);
-	void Shoot();
 
 	UPROPERTY(EditAnywhere)
 	float RotationRate = 50.f;
