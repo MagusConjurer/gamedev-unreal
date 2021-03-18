@@ -77,7 +77,7 @@ void AGun::PullTrigger()
 	{
 		// Show where bullet hits
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), BulletImpact, HitResult.Location, ShotDirection.Rotation());
-		UGameplayStatics::SpawnSoundAtLocation(GetWorld(), BulletImpactSound, HitResult.Location, ShotDirection.Rotation(), 0.3f);
+		UGameplayStatics::SpawnSoundAtLocation(GetWorld(), BulletImpactSound, HitResult.Location, ShotDirection.Rotation());
 		
 		// Get what was hit and send damage
 		AActor* HitActor = HitResult.GetActor();
