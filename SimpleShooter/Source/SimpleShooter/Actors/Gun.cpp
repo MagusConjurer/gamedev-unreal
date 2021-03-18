@@ -33,43 +33,58 @@ void AGun::Tick(float DeltaTime)
 
 }
 
-void AGun::PullTrigger()
+// Get the owning pawn and it's controller
+AController* AGun::GetOwnerController() const
 {
-	UGameplayStatics::SpawnEmitterAttached(MuzzleFlash, Mesh, TEXT("MuzzleFlashSocket"));
-
-	// Get the owning pawn and it's controller
 	APawn* OwnerPawn = Cast<APawn>(GetOwner());
-	if (!OwnerPawn) { return; }
-	AController* OwnerController = OwnerPawn->GetController();
-	if (!OwnerController) { return; }
+	if (!OwnerPawn) { return nullptr; }
+	return OwnerPawn->GetController();
+}
+
+bool AGun::GunTrace(FHitResult& HitResult, FVector& ShotDirection)
+{
+	AController* OwnerController = GetOwnerController();
+	if (!OwnerController) { return false; }
 
 	// Get location and rotation of the controller using out parameters
 	FVector ViewpointLocation;
 	FRotator ViewpointRotation;
 	OwnerController->GetPlayerViewPoint(ViewpointLocation, ViewpointRotation);
 
-	// Set the range and get any hit on the Bullet trace channel
+	// Set the range and direction
 	FVector LineTraceEnd = ViewpointLocation + ViewpointRotation.Vector() * MaxRange;
-	FHitResult HitResult;
-
+	ShotDirection = -ViewpointRotation.Vector();
+	
 	// Ignore collision for the gun and the character holding it
 	FCollisionQueryParams Params;
 	Params.AddIgnoredActor(this);
 	Params.AddIgnoredActor(GetOwner());
 
-	GetWorld()->LineTraceSingleByChannel(HitResult, ViewpointLocation, LineTraceEnd, ECollisionChannel::ECC_GameTraceChannel1, Params);
+	return GetWorld()->LineTraceSingleByChannel(HitResult, ViewpointLocation, LineTraceEnd, ECollisionChannel::ECC_GameTraceChannel1, Params);
+}
+
+
+void AGun::PullTrigger()
+{
+	UGameplayStatics::SpawnEmitterAttached(MuzzleFlash, Mesh, TEXT("MuzzleFlashSocket"));
+	UGameplayStatics::SpawnSoundAttached(MuzzleSound, Mesh, TEXT("MuzzleFlashSocket"));
+
+	FHitResult HitResult;
+	FVector ShotDirection;
+	bool bSuccess = GunTrace(HitResult, ShotDirection);
 	
-	if (HitResult.bBlockingHit)
+	if (bSuccess)
 	{
-		FVector ShotDirection = -ViewpointRotation.Vector();
 		// Show where bullet hits
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), BulletImpact, HitResult.Location, ShotDirection.Rotation());
+		UGameplayStatics::SpawnSoundAtLocation(GetWorld(), BulletImpactSound, HitResult.Location, ShotDirection.Rotation(), 0.3f);
 		
 		// Get what was hit and send damage
 		AActor* HitActor = HitResult.GetActor();
 		if (HitActor) 
 		{ 
 			FPointDamageEvent DamageEvent(Damage, HitResult, ShotDirection, nullptr);
+			AController* OwnerController = GetOwnerController();
 			HitActor->TakeDamage(Damage, DamageEvent, OwnerController, this);
 		}
 	}

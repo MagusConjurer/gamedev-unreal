@@ -34,10 +34,21 @@ private:
 	UParticleSystem* MuzzleFlash;
 	UPROPERTY(EditAnywhere)
 	UParticleSystem* BulletImpact;
+	UPROPERTY(EditAnywhere)
+	USoundBase* MuzzleSound;
+	UPROPERTY(EditAnywhere)
+	USoundBase* BulletImpactSound;
 
 	// Variables
 	UPROPERTY(EditAnywhere)
 	float MaxRange = 1000;
 	UPROPERTY(EditAnywhere)
 	float Damage = 10;
+
+	//Functions
+
+	// Get the owning pawn and it's controller
+	AController* GetOwnerController() const;
+
+	bool GunTrace(FHitResult& Hit, FVector& ShotDirection);
 };
