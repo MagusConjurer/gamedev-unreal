@@ -8,11 +8,13 @@ A number based puzzle game using basic C++ in the terminal.
 
 The player must solve the three number code to proceed through the rooms. Each room becomes incrementally more difficult.
 
+---
 #### Bull Cow Game
 A terminal game built using C++ within Unreal 4.22. 
 
 Similar to hangman, the player must guess the isogram (a word with no reapeating letters) within a limited number of lives. The game is won if the word is guessed and is lost if the lives run out. The player receives Bulls when their guess has letters in the correct index and Cows when the correct letter is in the wrong index.
 
+---
 #### Building Escape
 A first person game built using C++ within Unreal 4.22.
 
@@ -22,6 +24,7 @@ The player is trapped and must find a way to open the door to escape. They notic
 
 Building assets used from [Medieval Dungeon by Infuse Studio](https://www.unrealengine.com/marketplace/en-US/product/a5b6a73fea5340bda9b8ac33d877c9e2).
 
+---
 #### Toon Tanks
 A third person arcade tank game built using C++ within Unreal 4.25.
 
@@ -29,4 +32,14 @@ The player is a tank that can move around the map to fire at enemy turrets. Turr
 
 <a href="https://youtu.be/ZJNDI5ap7gg" target="_blank">View Demo</a>
 
-Base game resources provided by GameDev.tv to allow for more focus on implementing the logic through the C++ classes.
+Base game assets provided by GameDev.tv.
+
+---
+#### Simple Shooter
+A third person shooter game built using C++ within Unreal 4.25.
+
+The player must clear the facility of all hostiles before their health runs out to win. Once an enemy spots the player, they will follow and shoot the player.
+
+<a href="https://youtu.be/jg7klbJXJ8o" target="_blank">View Demo</a>
+
+Character assets use Wraith from Paragon by Epic Games. Level assets from the [Modular SciFi Season 1 Starter Bundle by Jonathon Frederick](https://www.unrealengine.com/marketplace/en-US/product/modular-scifi-season-1-starter-bundle). Other game assets provided by GameDev.tv.

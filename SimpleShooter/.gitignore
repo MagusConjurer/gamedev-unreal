@@ -1,0 +1,16 @@
+Binaries
+DerivedDataCache
+Content/AssetPacks
+Content/Maps/Sandbox_BuiltData.uasset
+Intermediate
+Saved
+*.VC.db
+*.opensdf
+*.opendb
+*.sdf
+*.sln
+*.suo
+*.xcodeproj
+*.xcworkspace
+.vs/S05_TestingGrounds/v15/ipch/
+.vs/
